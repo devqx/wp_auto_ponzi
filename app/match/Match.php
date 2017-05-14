@@ -18,9 +18,10 @@ class Match {
     public function match_users($username){
     
     global $wpdb;
+    
     //select a user from the receiver table who has not received and match to a new user 
     $receivers_table = $wpdb->prefix."autoponzi_ready_to_receive";
-    $sql = "SELECT * FROM $receivers_table ORDER BY created_at ASC LIMIT 1"; 
+    $sql = "SELECT * FROM $receivers_table ORDER BY created_at DESC LIMIT 1"; 
     $user_selected = $wpdb->get_row($sql, ARRAY_A);  
     $user_sel_username = $user_selected['user_login']; 
   
@@ -28,6 +29,7 @@ class Match {
     $username_to_match = $this->register->request['username'];
 
     $donators_table = $wpdb->prefix."autoponzi_ready_to_donate";
+
     $match_donator = "UPDATE $donators_table SET matched_to ='$user_sel_username' WHERE user_login='$username'";
 
     //update the receiver to know who he is matched to
