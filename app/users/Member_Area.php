@@ -82,8 +82,8 @@ class Member_Area{
         $receivers_table = $this->model->receivers_table;
         $receiver_info = $this->match->get_matched_user_details($this->cur_username, $receivers_table);
 
-        
-
+        if(!empty($receiver_info['matched_to'])){
+    
         echo "<div class='col-md-8 col-md-offset-3' style='margin-bottom:45px'>
         <div class='panel panel-default' style='border-radius:0'>
           <h3 class='text-center' style='padding:10px'>You Have Been Matched! With";?>
@@ -138,6 +138,16 @@ class Member_Area{
 
         $this->handle_donator_proof();
         echo "</div></div></div>";
+        }
+        else {
+
+             echo "<div class='col-md-8 col-md-offset-3' style='margin-bottom:45px'>
+        <div class='panel panel-default' style='border-radius:0'>
+          <h3 class='text-center' style='padding:10px'>Waiting To Be Matched
+          </h3><hr></div></div>";
+
+        }
+        
        
     }
 
