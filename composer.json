@@ -1,0 +1,10 @@
+{   "name":"Wp_Ponzi",
+    "description": "A wordpress ponzi plugin",
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"    
+        }
+
+    }
+ 
+}
