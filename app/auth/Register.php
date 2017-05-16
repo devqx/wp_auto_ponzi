@@ -98,35 +98,27 @@ public function register($table_name,$role){
             'email'=>$this->request['email'],
             'user_login'=>$this->request['username'],
             'user_pwd'=>$this->request['password'],
-            'amt_donated'=>'20,000',
+            'amt'=>'20,000',
             'account_name'=>$this->request['account_name'],
             'account_number'=>$this->request['account_number'],
             'bank_name'=>$this->request['bank_name'],
             'phone_number'=>$this->request['phone_number'],
-            'role'=>$role
+            'role'=>$role,
+
          )
         
         );
 
+        /*var_export($this->db_save);
+        var_export($wpdb);
+        die;*/
+
         //send a mail 
         wp_send_new_user_notifications(  $this->user_id);
-       echo "<script>
-
-    var d = new Date();
-
-    DayGiven = d.getDate() +1 ;
-
-    curMonth = d.getMonth() +1 ;
-
-    curYear = d.getFullYear();
-
-    window.endtime = curYear + "-" + curMonth + "-" + DayGiven;
-
-    </script>";
 
         $this->match->match_users($this->request['username']);
         $success_url = home_url('login');
-        $this->redirect_url = add_query_arg('Register', 'successful', $success_url);
+        $this->redirect_url = add_query_arg('Registration', 'successful', $success_url);
     }
 
     }

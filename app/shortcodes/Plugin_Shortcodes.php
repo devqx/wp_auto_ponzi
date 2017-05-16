@@ -77,12 +77,12 @@
      }
 
      public function render_admin_dashboard(){
-       if(current_user_can('administrator')){
+       //if(current_user_can('administrator')){
        $this->view->load_view('admin_dashboard');
-       }
-       else {
-         echo "<div class='alert-danger col-md-9'><p style='padding:10px'>Protected Page , Only for the Super Users! You Need To Be An Admin To Access Page</p></div>";
-       }
+      // }
+      // else {
+         //echo "<div class='alert-danger col-md-9'><p style='padding:10px'>Protected Page , Only for the Super Users! You Need To Be An Admin To Access Page</p></div>";
+       //}
      }
 
      public function render_admin_addReceiver(){

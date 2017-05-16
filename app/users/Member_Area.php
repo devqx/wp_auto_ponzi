@@ -250,7 +250,7 @@ class Member_Area{
           <h3>Payer Details Below:</h3><hr>
           <p>Full Name: <?php echo $donator_info['full_name'];?></p>
           <p>Phone Number: <?php echo $donator_info['phone_number'];?></p>
-          <p>Amount To Pay: &#8358;<?php echo $donator_info['amt_donated'];?></p>
+          <p>Amount To Pay: &#8358;<?php echo $donator_info['amt'];?></p>
           <p> NOTE : <strong class='badge' style='padding:10px'>The Other &#8358;20,000 Has been used to donate for your automatically</strong></p>
           <?php }?>
           <?php if(!empty($donator_info['payment_proof'])){
