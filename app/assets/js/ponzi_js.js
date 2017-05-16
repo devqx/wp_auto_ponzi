@@ -19,16 +19,16 @@ if(hideconfirm ==true){
     // 1.0 set the endtime / date 
 
 
-    var d = new Date();
+    /* var d = new Date();
 
     DayGiven = d.getDate() +1 ;
 
     curMonth = d.getMonth() +1 ;
 
     curYear = d.getFullYear();
-//
-    var deadline = curYear + "-" + curMonth + "-" + DayGiven;
 
+    var deadline = curYear + "-" + curMonth + "-" + DayGiven;
+    */
 
   //** 2.0 calculate the remaining time, write a function to do so  */
   function getRemainingTime(endtime){
@@ -52,7 +52,8 @@ if(hideconfirm ==true){
 
 function updateClock(){
     clock = document.getElementById('timer');
-    var t = getRemainingTime(deadline);
+    var endtime = window.endtime;
+    var t = getRemainingTime(endtime);
 
     //var daysSpan = clock.querySelector('.days');
     var hoursSpan = clock.querySelector('.hours');

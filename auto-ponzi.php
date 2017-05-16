@@ -93,7 +93,7 @@ function init(){
       $deactivator->deactivate();  
     }
 
-add_action( 'init', 'init' );
+add_action( 'plugins_loaded', 'init' );
 
 //register the plugin activation hooks 
 register_activation_hook( __FILE__, 'activate' );

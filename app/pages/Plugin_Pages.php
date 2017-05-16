@@ -46,13 +46,19 @@ class Plugin_Pages {
                 'content'=>'[member-login]'
             ),
             'Member Dashboard'=>array(
-                'title'=>'Your Member Area',
+                'title'=>'Your Dashboard',
                 'content'=>'[member-dashboard]'
             ),
               'Admin Dashboard'=>array(
                 'title'=>'Your Admin Dashboard',
                 'content'=>'[admin-dashboard]'
             ),
+
+             'Admin Delete User'=>array(
+                'title'=>'Delete User Page',
+                'content'=>'[admin-del-user]'
+            ),
+
         );
 
         return $this->page_definitions;

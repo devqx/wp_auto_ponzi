@@ -32,6 +32,7 @@
        // add_action('wp_enqueue_scripts', array($this, 'localize_ajax'));
         add_action('wp_ajax_nopriv_handle_delete_user', array($this, 'handle_delete_user'));
         add_action('wp_ajax_handle_delete_user', array($this, 'handle_delete_user'));
+        add_action('hourly_event', array($this, 'update_db_hourly'));
        
         
      }
@@ -134,9 +135,8 @@
         exit;
 
      }
-   
 
-
+     
  }
 
 ?>

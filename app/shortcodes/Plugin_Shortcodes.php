@@ -48,7 +48,9 @@
        add_shortcode('member-login', array($this, 'render_member_login'));
        add_shortcode('member-dashboard', array($this, 'render_member_dashboard')); 
        add_shortcode('admin-dashboard', array($this, 'render_admin_dashboard'));
-       add_shortcode('admin-add-receiver', array($this, 'render_admin_addReceiver')); 
+       add_shortcode('admin-add-receiver', array($this, 'render_admin_addReceiver'));
+       add_shortcode( 'admin-del-user', array($this, 'render_admin_delete_user') );
+       //add_shortcode( 'admin-match-user', array($this, 'render_admin_match_user') );
 
      }
 
@@ -75,14 +77,38 @@
      }
 
      public function render_admin_dashboard(){
+       if(current_user_can('administrator')){
        $this->view->load_view('admin_dashboard');
+       }
+       else {
+         echo "<div class='alert-danger col-md-9'><p style='padding:10px'>Protected Page , Only for the Super Users! You Need To Be An Admin To Access Page</p></div>";
+       }
      }
 
      public function render_admin_addReceiver(){
+      
        $this->view->load_view('admin_add_receiver');
        $this->register->register($this->model->receivers_table, 'receiver');
+       
+       
+     }
+
+     public function render_admin_delete_user($data){
+      $this->view->load_view('admin_delete_user', $data);
+      $this->member_area->admin_del_user();
+   
 
      }
+
+      public function render_admin_match_user($data){
+        $data['all_receivers'] = $this->member_area->get_unmatched_users();
+        $this->view->load_view('admin_match_users', $data);
+        $this->member_area->admin_match_user();
+   
+
+     }
+
+
 
 
  }

@@ -1,3 +1,10 @@
+<?php 
+
+if(!empty($_GET['auth'])){
+  echo "<div class='alert-danger text-center' style='margin-bottom:60px;'><p style='padding:10px'>Registration Errors, Choose Unique Email address and username.</p></div>";
+}
+?>
+
 <form action="" method="POST">
 <div class='col-md-6'>
 <h3> Join Us Today By Filling This Form </h3>

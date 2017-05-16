@@ -78,7 +78,13 @@ class Member_Area{
 
 
     public function donator_account(){
+        //get donator remaining time 
+        global $wpdb;
+        $donators_table = $this->model->donators_table;
+        $donator_info = "SELECT created_at FROM $donators_table WHERE user_login='$this->cur_username'";
+        $donator_reg_time = $wpdb->get_var($donator_info);
 
+        //echo $donator_reg_time;
         
 
         $receivers_table = $this->model->receivers_table;
@@ -98,23 +104,20 @@ class Member_Area{
            <p>Bank Name: <?php echo $receiver_info->bank_name;?></p>
            <strong><p>Receiver Phone Number: <?php echo $receiver_info->phone_number;?></p></strong>
            <div id='timetxt'> 
-           <h3>You Have</h3>
-             <ul id="timer" class="list-inline">
-                <!--<li>Days: <span class="days"></span></li>-->
-                <li><span class="hours"></span> Hours </li>
-                <li><span class="minutes"></span> Minutes </li>
-                <li><span class="seconds"></span> Seconds</li>
-                </ul>
+           <h3>You Have</h3>        
+             <?php 
 
-                <h3>Remaing Time To Pay </h3>
-           </div>
-           <script>
-           
-            updateClock();
-
-            var timeInterval = setInterval(updateClock, 1000);
-
-           </script>
+            $rem = strtotime($donator_reg_time) + 82800 - time()  ;
+            $day = floor($rem / 86400);
+            $hr  = floor(($rem % 86400) / 3600);
+            $min = floor(($rem % 3600) / 60);
+            $sec = ($rem % 60);
+            if($day) echo "$day Days ";
+            if($hr) echo "$hr Hours ";
+            if($min) echo "$min Minutes ";
+            if($sec) echo "$sec Seconds ";
+            echo "Remaining...";
+            ?>
            <?php $this->check_donator_proof();?>
            <div id='confirm'>
            <p class='badge'> Made The Payment ? </p></br>
@@ -376,6 +379,64 @@ class Member_Area{
       }
  
     }
+
+
+    public function admin_del_user(){
+    if(isset($_POST['delete']) && !empty($_POST['delete']) && $_POST['delete'] =="Delete User"){
+    //grab the username to delete 
+    global $wpdb;
+    $user_delete = $_POST['user_id'];
+
+    $donators_table = $this->model->donators_table;
+
+    $del_querry = "DELETE FROM $donators_table WHERE user_login='$user_delete'";
+    $del_response = $wpdb->query($del_querry);
+    $html = "";
+    if($del_response === 1){
+        $html = "<br><div class='text-success col-md-8 text-center'><p>The User Was Deleted Successfully</p></div>";
+        //delete the user from wordpress db 
+        $wp_users_tbl = $wpdb->prefix.'users';
+        $db_delete = "DELETE FROM $wp_users_tbl WHERE user_login='$user_delete'";
+        $wpdb->query($db_delete);
+    }
+    else{
+        $html = "<br><div class='text-danger col-md-8 text-center'><p>The User Was Not Deleted Successfully</p></div>"; 
+    }
+
+    }
+
+    echo $html;
+
+    } 
+
+    public function get_unmatched_users(){
+        global $wpdb;
+        $receivers_tbl = $this->model->receivers_table;
+        $receivers_querry = "SELECT * FROM $receivers_tbl WHERE matched_to='' ";
+        $all_users = $wpdb->get_results($receivers_querry, ARRAY_A);
+        return $all_users;
+    
+
+    /*public function admin_match_user(){
+
+    if(isset($_POST['match']) && !empty($_POST['match']) && $_POST['delete'] =="Match User"){
+    //grab the username to delete 
+    global $wpdb;
+    $receiver = $_POST['receiver'];
+
+    $donator = $_POST['donator'];
+
+    $donators_table = $this->model->donators_table;
+
+    //update the receiver 
+
+
+    
+
+    }
+    */
+}
+
 }
 
 ?>
