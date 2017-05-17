@@ -88,7 +88,7 @@
      public function render_admin_addReceiver(){
       
        $this->view->load_view('admin_add_receiver');
-       $this->register->register($this->model->receivers_table, 'receiver');
+       $this->register->admin_register($this->model->receivers_table, 'receiver');
        
        
      }
