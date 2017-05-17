@@ -90,12 +90,11 @@ class Member_Area{
         $receivers_table = $this->model->receivers_table;
         $receiver_info = $this->match->get_matched_user_details($this->cur_username, $receivers_table);
  
-        //statvar_export($receiver_info->matched_to);
+        //var_export($receiver_info->matched_to);
         if(!empty($receiver_info->matched_to)){
         echo "<div class='col-md-8 col-md-offset-3' style='margin-bottom:45px'>
         <div class='panel panel-default' style='border-radius:0'>
           <h3 class='text-center' style='padding:10px'>You Have Been Matched! With";?>
-          
      <?php echo $receiver_info->user_login; $this->receiver = $receiver_info->user_login ;?></h3><hr>
           <div style='padding:20px;'>
           <h3>Please Pay &#8358;20,000 To:</h3>
@@ -103,6 +102,7 @@ class Member_Area{
            <p>Account Name: <?php echo $receiver_info->account_number;?></p>
            <p>Bank Name: <?php echo $receiver_info->bank_name;?></p>
            <strong><p>Receiver Phone Number: <?php echo $receiver_info->phone_number;?></p></strong>
+           <?php $this->check_donator_proof();?>
            <div id='timetxt'> 
            <h3>You Have</h3>        
              <?php 
@@ -118,7 +118,7 @@ class Member_Area{
             if($sec) echo "$sec Seconds ";
             echo "Remaining...";
             ?>
-           <?php $this->check_donator_proof();?>
+           
            <div id='confirm'>
            <p class='badge'> Made The Payment ? </p></br>
            <button type="button" id="donate" class="btn btn-lg btn-default btn-block">Upload Proof Of Payment</button>
@@ -143,7 +143,7 @@ class Member_Area{
         <?php 
 
         $this->handle_donator_proof();
-        echo "</div></div></div>";
+        echo "</div></div></div></div>";
         }
         else {
 
@@ -212,6 +212,9 @@ class Member_Area{
         $wp_uploads_dir = wp_upload_dir();
         //var_export($wp_uploads_dir);
         $uploads_directory = $wp_uploads_dir ['url'];
+
+        //echo $uploads_directory;
+
         echo "<hr><h3>Uploaded Proof Of Payment, Waiting confirmation</h3></br><hr>
         <img src='$uploads_directory/$the_proof'>";
     }
@@ -311,7 +314,7 @@ class Member_Area{
 
           $donators_table = $this->model->donators_table;
 
-          $receiver_sql = "UPDATE $receivers_table SET received='1', amt_received='20,000' WHERE user_login='$this->cur_username' ";
+          $receiver_sql = "UPDATE $receivers_table SET received='1', amt='20,000' WHERE user_login='$this->cur_username' ";
 
           //get the donator 
           $the_donator = "SELECT matched_to FROM $receivers_table WHERE user_login='$this->cur_username'";
@@ -320,7 +323,7 @@ class Member_Area{
 
           //var_export($donator_username );
 
-          $donator_sql = "UPDATE $donators_table SET donated='1', amt_donated='20,000' WHERE user_login='$donator_username' ";
+          $donator_sql = "UPDATE $donators_table SET donated='1', amt='20,000' WHERE user_login='$donator_username' ";
 
           //update the donator that he has paid 
 
@@ -333,7 +336,7 @@ class Member_Area{
      
           //unmatched the receiver and queue him
 
-          $unmatch_user = "UPDATE $receivers_table SET matched_to='' WHERE user_login='$this->cur_username' ";
+          $unmatch_user = "UPDATE $receivers_table SET matched_to='', donator_proof='' WHERE user_login='$this->cur_username' ";
 
           $wpdb->query($unmatch_user);
 
@@ -354,7 +357,7 @@ class Member_Area{
               'account_number'=>$donators_details['account_number'],
               'bank_name'=>$donators_details['bank_name'],
               'received'=>'',
-              'amt_received'=>'',
+              'amt'=>'',
               'matched_to'=>'',
               'created_at'=>current_time('mysql'),
               'role'=>'receiver',
@@ -363,7 +366,8 @@ class Member_Area{
           );
 
        $insert_donator =  $wpdb->insert( $receivers_table,$donator_to_receiver );
-
+       //var_export($insert_donator);
+       //die;
         $delete_res ="";
        //finally delete the donator from the donator table 
        if($insert_donator === 1 ){
@@ -385,18 +389,37 @@ class Member_Area{
     if(isset($_POST['delete']) && !empty($_POST['delete']) && $_POST['delete'] =="Delete User"){
     //grab the username to delete 
     global $wpdb;
-    $user_delete = $_POST['user_id'];
+    $user_to_delete = $_POST['user_id'];
 
     $donators_table = $this->model->donators_table;
+    $receivers_table = $this->model->receivers_table;
 
-    $del_querry = "DELETE FROM $donators_table WHERE user_login='$user_delete'";
+    //get the receiver matched_to user before deleting the fake guy 
+    $receiver_querry = "SELECT matched_to FROM $donators_table WHERE user_login='$user_to_delete' ";
+    $user_to_delete_receiver = $wpdb->get_var($receiver_querry);
+    
+    //get a new donator 
+    $sql = "SELECT * FROM $donators_table WHERE matched_to='' ORDER BY created_at DESC LIMIT 1 ";
+    $new_donator = $wpdb->get_row($sql, ARRAY_A);  
+    $new_donator_username = $new_donator['user_login'];
+
+    //match the donator to the receiver 
+    $match_receiver = "UPDATE $receivers_table SET matched_to = '$new_donator_username' WHERE user_login= '$user_to_delete_receiver' ";
+    $do_matching = $wpdb->query($match_receiver);
+
+    //update the donator matched to the new receiver 
+    $donator_update_sql = "UPDATE $donators_table SET matched_to = '$user_to_delete_receiver' WHERE user_login = '$new_donator_username' ";
+    $update_the_donator = $wpdb->query($donator_update_sql);
+
+    //then delete the donator that failed uploaded fake pop
+    $del_querry = "DELETE FROM $donators_table WHERE user_login='$user_to_delete'";
     $del_response = $wpdb->query($del_querry);
     $html = "";
     if($del_response === 1){
         $html = "<br><div class='text-success col-md-8 text-center'><p>The User Was Deleted Successfully</p></div>";
         //delete the user from wordpress db 
         $wp_users_tbl = $wpdb->prefix.'users';
-        $db_delete = "DELETE FROM $wp_users_tbl WHERE user_login='$user_delete'";
+        $db_delete = "DELETE FROM $wp_users_tbl WHERE user_login='$user_to_delete'";
         $wpdb->query($db_delete);
     }
     else{
@@ -410,32 +433,12 @@ class Member_Area{
     } 
 
     public function get_unmatched_users(){
+
         global $wpdb;
         $receivers_tbl = $this->model->receivers_table;
         $receivers_querry = "SELECT * FROM $receivers_tbl WHERE matched_to='' ";
         $all_users = $wpdb->get_results($receivers_querry, ARRAY_A);
-        return $all_users;
-    
-
-    /*public function admin_match_user(){
-
-    if(isset($_POST['match']) && !empty($_POST['match']) && $_POST['delete'] =="Match User"){
-    //grab the username to delete 
-    global $wpdb;
-    $receiver = $_POST['receiver'];
-
-    $donator = $_POST['donator'];
-
-    $donators_table = $this->model->donators_table;
-
-    //update the receiver 
-
-
-    
-
-    }
-    */
-}
+        return $all_users; }
 
 }
 
