@@ -127,5 +127,76 @@ public function register($table_name,$role){
      
 }
 
+
+
+public function admin_register($table_name,$role){
+
+    if(isset($_POST['submit']) && !empty($_POST['submit'])){
+        foreach($_POST as $key=>$val){
+            $this->request[$key] = sanitize_text_field($val);
+        }
+
+        //insert the user into wordpress database table 
+
+        $this->user_data = array(
+            'user_login'=>$this->request['username'],
+            'user_pass'=>$this->request['password'],
+            'user_email'=>$this->request['email'],
+            'display_name'=>$this->request['full_name']
+        );
+
+        //call the wordpress Api for inserting users : wp_insert_user
+        /**
+         *@return $user_id on success, wp_error object on failure 
+         */
+         $this->user_id = wp_insert_user($this->user_data);
+         $this->redirect_url = home_url('registration');
+
+          //if error , redirect back 
+
+         if($errors = is_wp_error($this->user_id)){
+            $error_url = home_url('registration');
+            $this->redirect_url = add_query_arg('auth', 'errors',$error_url );
+               
+         }
+
+       else {
+
+        //save the user details to the db
+        global $wpdb;
+    
+        $this->db_save = $wpdb->insert(
+        $table_name, array(
+            'full_name'=>$this->request['full_name'],
+            'email'=>$this->request['email'],
+            'user_login'=>$this->request['username'],
+            'user_pwd'=>$this->request['password'],
+            'amt'=>'20,000',
+            'account_name'=>$this->request['account_name'],
+            'account_number'=>$this->request['account_number'],
+            'bank_name'=>$this->request['bank_name'],
+            'phone_number'=>$this->request['phone_number'],
+            'role'=>$role,
+
+         )
+        
+        );
+
+        /*var_export($this->db_save);
+        var_export($wpdb);
+        die;*/
+
+        //send a mail 
+        wp_send_new_user_notifications(  $this->user_id);
+        $success_url = home_url('login');
+        $this->redirect_url = add_query_arg('Registration', 'successful', $success_url);
+    }
+
+   
+}
+
+ wp_redirect($this->redirect_url);
+}
+
      
  }
