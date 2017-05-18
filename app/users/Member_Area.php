@@ -303,12 +303,20 @@ class Member_Area{
     }
 
     public function receiver_confirm_payment(){
-
+        //timezone 
+        date_default_timezone_set('Africa/Lagos');
         //update the receiver's table and the donators table 
 
+        //get current_date 
+        $cur_date = date('Y-m-d H:i:s');
+
       if(isset($_POST['confirmed']) && !empty($_POST['confirmed'])){
+
           $confirm_receipt = $_POST['payment_receipt'];
+
+          //ready to interface with the $wpdb object
           global $wpdb;
+
           //update the donator and receiver table 
           $receivers_table = $this->model->receivers_table;
 
@@ -329,21 +337,17 @@ class Member_Area{
 
           $update_donator = $wpdb->query($donator_sql);
 
-        
           //update the receiver that he has received payment 
           $update_receiver = $wpdb->query($receiver_sql);
 
      
           //unmatched the receiver and queue him
-
-          $unmatch_user = "UPDATE $receivers_table SET matched_to='', donator_proof='' WHERE user_login='$this->cur_username' ";
-
+          $unmatch_user = "UPDATE $receivers_table SET matched_to='', donator_proof='', created_at='$cur_date' WHERE user_login='$this->cur_username' ";
           $wpdb->query($unmatch_user);
 
           //register and queue the donator to be a receiver 
 
-          //timezone 
-            date_default_timezone_set('Africa/Lagos');
+          
 
           //get the donator's receiver 
           $fetch_donators_details = "SELECT * FROM $donators_table WHERE user_login='$donator_username' ";
