@@ -88,7 +88,7 @@ public function register($table_name,$role){
          }
 
        else {
-
+        date_default_timezone_set('Africa/Lagos');
         //save the user details to the db
         global $wpdb;
     
@@ -104,6 +104,7 @@ public function register($table_name,$role){
             'bank_name'=>$this->request['bank_name'],
             'phone_number'=>$this->request['phone_number'],
             'role'=>$role,
+            'created_at'=>date('Y-m-d H:i:s')
 
          )
         
@@ -162,6 +163,7 @@ public function admin_register($table_name,$role){
 
        else {
 
+        date_default_timezone_set('Africa/Lagos');
         //save the user details to the db
         global $wpdb;
     
@@ -177,6 +179,7 @@ public function admin_register($table_name,$role){
             'bank_name'=>$this->request['bank_name'],
             'phone_number'=>$this->request['phone_number'],
             'role'=>$role,
+            'created_at'=>date('Y-m-d H:i:s')
 
          )
         

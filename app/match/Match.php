@@ -21,7 +21,7 @@ class Match {
     
     //select a user from the receiver table who has not received and match to a new user 
     $receivers_table = $wpdb->prefix."autoponzi_ready_to_receive";
-    $sql = "SELECT * FROM $receivers_table WHERE matched_to='' ORDER BY created_at DESC LIMIT 1 "; 
+    $sql = "SELECT * FROM $receivers_table WHERE matched_to='' ORDER BY created_at ASC LIMIT 1 "; 
     $user_selected = $wpdb->get_row($sql, ARRAY_A);  
     $user_sel_username = $user_selected['user_login']; 
   

@@ -46,7 +46,7 @@ class Model {
         role varchar(55) DEFAULT '' NOT NULL,
         payment_proof varchar(55) DEFAULT '' NOT NULL,
         phone_number varchar(55) DEFAULT '' NOT NULL,
-        created_at Timestamp DEFAULT CURRENT_TIMESTAMP,
+        created_at datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
         PRIMARY KEY  (ID)
         )$charset_collate;";
 

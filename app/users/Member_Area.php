@@ -342,11 +342,13 @@ class Member_Area{
 
           //register and queue the donator to be a receiver 
 
+          //timezone 
+            date_default_timezone_set('Africa/Lagos');
+
           //get the donator's receiver 
           $fetch_donators_details = "SELECT * FROM $donators_table WHERE user_login='$donator_username' ";
 
           $donators_details = $wpdb->get_row($fetch_donators_details, ARRAY_A);
-
 
           $donator_to_receiver = array(
               'full_name'=>$donators_details['full_name'],
@@ -359,7 +361,7 @@ class Member_Area{
               'received'=>'',
               'amt'=>'',
               'matched_to'=>'',
-              'created_at'=>current_time('mysql'),
+              'created_at'=>date('Y-m-d H:i:s'),
               'role'=>'receiver',
               'phone_number'=>$donators_details['phone_number'],
               'donator_proof'=>''
@@ -399,7 +401,7 @@ class Member_Area{
     $user_to_delete_receiver = $wpdb->get_var($receiver_querry);
     
     //get a new donator 
-    $sql = "SELECT * FROM $donators_table WHERE matched_to='' ORDER BY created_at DESC LIMIT 1 ";
+    $sql = "SELECT * FROM $donators_table WHERE matched_to='' ORDER BY created_at ASC LIMIT 1 ";
     $new_donator = $wpdb->get_row($sql, ARRAY_A);  
     $new_donator_username = $new_donator['user_login'];
 

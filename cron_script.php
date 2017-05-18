@@ -3,6 +3,7 @@
 //cron_command : /usr/local/bin/php /home/user/public_html/cron_script.php
 
 date_default_timezone_set('Africa/Lagos');
+
 //require wordpress init
 require(dirname(__FILE__).'/wp-blog-header.php');
 
