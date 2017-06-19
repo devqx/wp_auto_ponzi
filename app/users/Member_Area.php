@@ -97,7 +97,7 @@ class Member_Area{
           <h3 class='text-center' style='padding:10px'>You Have Been Matched! With";?>
      <?php echo $receiver_info->user_login; $this->receiver = $receiver_info->user_login ;?></h3><hr>
           <div style='padding:20px;'>
-          <h3>Please Pay &#8358;20,000 To:</h3>
+          <h3>Please Pay &#8358;10,000 To:</h3>
            <p>Account Name: <?php echo $receiver_info->account_name;?></p>
            <p>Account Name: <?php echo $receiver_info->account_number;?></p>
            <p>Bank Name: <?php echo $receiver_info->bank_name;?></p>
@@ -254,7 +254,7 @@ class Member_Area{
           <p>Full Name: <?php echo $donator_info['full_name'];?></p>
           <p>Phone Number: <?php echo $donator_info['phone_number'];?></p>
           <p>Amount To Pay: &#8358;<?php echo $donator_info['amt'];?></p>
-          <p> NOTE : <strong class='badge' style='padding:10px'>The Other &#8358;20,000 Has been used to donate for your automatically</strong></p>
+          <p> NOTE : <strong class='badge' style='padding:10px'>The Other &#8358;10,000 Has been used to donate for your automatically</strong></p>
           <?php }?>
           <?php if(!empty($donator_info['payment_proof'])){
 
@@ -322,7 +322,7 @@ class Member_Area{
 
           $donators_table = $this->model->donators_table;
 
-          $receiver_sql = "UPDATE $receivers_table SET received='1', amt='20,000' WHERE user_login='$this->cur_username' ";
+          $receiver_sql = "UPDATE $receivers_table SET received='1', amt='10,000' WHERE user_login='$this->cur_username' ";
 
           //get the donator 
           $the_donator = "SELECT matched_to FROM $receivers_table WHERE user_login='$this->cur_username'";
@@ -331,7 +331,7 @@ class Member_Area{
 
           //var_export($donator_username );
 
-          $donator_sql = "UPDATE $donators_table SET donated='1', amt='20,000' WHERE user_login='$donator_username' ";
+          $donator_sql = "UPDATE $donators_table SET donated='1', amt='10,000' WHERE user_login='$donator_username' ";
 
           //update the donator that he has paid 
 
@@ -448,5 +448,3 @@ class Member_Area{
 
 }
 
-
-?>
