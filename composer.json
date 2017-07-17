@@ -1,10 +1,31 @@
-{   "name":"Wp_Ponzi",
+{
+    "name": "Wp_Ponzi",
     "description": "A wordpress ponzi plugin",
+    "homepage": "https://github.com/tommcfarlin/cmb2-featured-mobile-image",
+    "authors": [{
+        "name": "Oluwaseun Paul",
+        "email": "devqxz@gmail.com",
+        "homepage": "https://github.com/devqx"
+    }],
     "autoload": {
         "psr-4": {
-            "app\\": "app/"    
+            "app\\": "app/"
         }
 
+    },
+
+
+    "keywords": [
+        "wordpress"
+    ],
+    "support": {
+        "issues": "https://github.com/tommcfarlin/wp-auto-ponzi/issues"
+    },
+    "require": {
+        "php": ">=7.0",
+        "composer/installers": "~1.0"
+    },
+    "require-dev": {
+
     }
- 
 }
