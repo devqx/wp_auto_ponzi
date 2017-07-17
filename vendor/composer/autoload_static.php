@@ -11,20 +11,12 @@ class ComposerStaticInit7d753f2cf5b2f0a42fa2b6a96e9f8ada
         array (
             'app\\' => 4,
         ),
-        'F' => 
-        array (
-            'Faker\\' => 6,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'app\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
-        ),
-        'Faker\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
         ),
     );
 
