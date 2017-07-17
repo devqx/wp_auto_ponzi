@@ -22,8 +22,7 @@
         "issues": "https://github.com/tommcfarlin/wp-auto-ponzi/issues"
     },
     "require": {
-        "php": ">=7.0",
-        "composer/installers": "~1.0"
+        "php": ">=7.0"
     },
     "require-dev": {
 
