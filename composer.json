@@ -1,7 +1,7 @@
 {
     "name": "devx/wordpress-auto-ponzi",
     "description": "A wordpress ponzi plugin",
-    "homepage": "https://github.com/devqx/wp-auto-ponzi",
+    "homepage": "https://github.com/devqx/wp_auto_ponzi",
     "authors": [{
         "name": "Oluwaseun Paul",
         "email": "devqxz@gmail.com",
